@@ -13,22 +13,51 @@ export default function TimeBlock(props) {
   const [myHour, setMyHour] = useState(props.timeBlock.hour);
   const [myMinutes, setMyMinutes] = useState(props.timeBlock.minutes);
   const [mySec, setMySec] = useState(props.timeBlock.seconds);
-  const [myMilisec, setMyMilisec] = useState(props.timeBlock.miliseconds);
   useEffect(() => {
-    console.log(props.sec +"gggg")
-    console.log(props.timeBlock.beforeMyTimeToRun +"before")
-    console.log(props.timeBlock.untilMyTimeToRun +"untilMyTimeToRun")
+    if(props.sec <= 0 ){
+      setMyHour(props.timeBlock.hour);
+      setMyMinutes(props.timeBlock.minutes);
+      setMySec(props.timeBlock.seconds);
+      setPercent(0);
+      setShowDetail(false);
+    }
+    // it is the time of this time block to run 
+    // we focus on him and openning his details
+    if(props.sec === props.timeBlock.beforeMyTimeToRun){
+      props.scrollToIndex(props.timeBlock.position)
+      setShowDetail(true);
+    }
+    // it is the end time of this time block to run 
+    // we are closing his details
+    if(props.sec === props.timeBlock.untilMyTimeToRun){
+      setShowDetail(false);
+    }
+    // checking if is run time for this time block
     if(props.sec >= props.timeBlock.beforeMyTimeToRun  && props.sec <= props.timeBlock.untilMyTimeToRun){
-      setMySec (props.sec);
+      if(mySec > 0 ){
+        console.log("finished timer")
+        setMySec(mySec=>mySec-1)
+      }else if(myMinutes > 0 ){
+        setMySec(59);
+        setMyMinutes(myMinutes=>myMinutes-1)
+      }else if(myHour > 0){
+        setMySec(59);
+        setMyMinutes(59)
+        setMyMinutes(myHour=>myHour-1)
+      }else{
+        console.log("finished timer")
+      }
+      // changing the circle progress bar
       setPercent((props.sec - props.timeBlock.beforeMyTimeToRun) *100 / (props.timeBlock.untilMyTimeToRun - props.timeBlock.beforeMyTimeToRun) ) 
     }  
   },[props.sec])
 
-  
 
   const handleShowDescription = () => {
     setShowDetail(!showDetail)
   }
+  // time block with id -1 must be included, and will be invisable 
+  // its prettier 
   if(props.timeBlock.id === -1){
     return (
       <View style={styles.empty_last_block}>

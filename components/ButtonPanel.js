@@ -12,6 +12,10 @@ export default function ButtonPanel(props) {
         setPlayPause(!playPause)
     }
 
+    const handleReset = () => {
+      props.ResetTimer()
+    }
+
   return (
     <View style={styles.play_panel}>
         <View style={styles.play_pause_button}>
@@ -53,7 +57,7 @@ export default function ButtonPanel(props) {
                 size={40}
                 color='#3b5998'
                 borderRadius={40}
-                onPress={handlePlayPause}
+                onPress={handleReset}
             >
             </Icon>
         </View>

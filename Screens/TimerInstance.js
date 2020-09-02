@@ -40,7 +40,7 @@ export default function TimerInstance() {
         <View style={styles.list_container}>
             <TimerList  sec={sec} startPause={startPause}/>
         </View>
-        <ButtonPanel  handleToggle={handleToggle} minutes={padToTwo(minutes)} sec={padToTwo(sec)}/>
+        <ButtonPanel ResetTimer={ResetTimer} handleToggle={handleToggle} minutes={padToTwo(minutes)} sec={padToTwo(sec)}/>
         
         
     </View>
