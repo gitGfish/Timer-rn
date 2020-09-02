@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import React from 'react';
+import React,{ useState,useEffect } from 'react';
 import { StyleSheet, Text, View ,FlatList } from 'react-native';
 import TimeBlock  from './TimeBlock'
 import { Divider } from 'react-native-elements';
@@ -10,7 +10,8 @@ const fetchedTimer = [{
     hour:0,
     minutes:1,
     seconds:3,
-    miliseconds:1*60*1000 + 3*1000,
+    beforeMyTimeToRun:0,
+    untilMyTimeToRun:1*60 + 3,
 },
 {
     id:2,
@@ -19,7 +20,8 @@ const fetchedTimer = [{
     hour:0,
     minutes:1,
     seconds:2,
-    miliseconds:1*60*1000 + 3*1000 + 1*60*1000 + 2*1000,
+    beforeMyTimeToRun:1*60 + 3,
+    untilMyTimeToRun:1*60 + 3 + 1*60 + 2,
 },
 {
     id:3,
@@ -28,7 +30,8 @@ const fetchedTimer = [{
     hour:0,
     minutes:7,
     seconds:0,
-    miliseconds:1*60*1000 + 3*1000 + 1*60*1000 + 2*1000 + 7*60*1000,
+    beforeMyTimeToRun:1*60 + 3 + 1*60 + 2,
+    untilMyTimeToRun:1*60 + 3 + 1*60 + 2 + 7*60,
 },
 {
     id:-1,
@@ -37,18 +40,20 @@ const fetchedTimer = [{
     hour:0,
     minutes:6,
     seconds:15,
-    miliseconds:0,
+    beforeMyTimeToRun:0,
+    untilMyTimeToRun:0,
 }]
 
 const handleNextClock = () =>{
 
 }
 
-export default function TimerList() {
+export default function TimerList(props) {
+
   return (
     <View style={styles.container}>
-      <FlatList  data={fetchedTimer} renderItem={ time_block => (
-          <TimeBlock handleNextClock={ handleNextClock} key={''+time_block.id} timeBlock={time_block.item}/>
+      <FlatList data={fetchedTimer} renderItem={ time_block => (
+          <TimeBlock key={time_block.id} sec={props.sec} handleNextClock={ handleNextClock} timeBlock={time_block.item}/>
         )
     } />
     

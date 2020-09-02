@@ -18,10 +18,18 @@ export default function TimerInstance() {
         milisec,
         minutes,
         hour,
-        setReset,
+        ResetTimer,
+        StopTimer,
+        StartTimer,
+        getSec
     
       } = Timer()
       const handleToggle = ( ) => {
+        if(startPause){
+          StopTimer();
+        }else{
+          StartTimer();
+        }
         setStartPause(!startPause);
       }
         
@@ -30,9 +38,9 @@ export default function TimerInstance() {
   return (
     <View style={styles.container}>
         <View style={styles.list_container}>
-            <TimerList startPause={startPause}/>
+            <TimerList  sec={sec} startPause={startPause}/>
         </View>
-        <ButtonPanel  handleToggle={handleToggle} minutes={padToTwo(minutes)} sec={padToTwo(milisec)}/>
+        <ButtonPanel  handleToggle={handleToggle} minutes={padToTwo(minutes)} sec={padToTwo(sec)}/>
         
         
     </View>

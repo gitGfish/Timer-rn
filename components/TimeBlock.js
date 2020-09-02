@@ -15,32 +15,16 @@ export default function TimeBlock(props) {
   const [mySec, setMySec] = useState(props.timeBlock.seconds);
   const [myMilisec, setMyMilisec] = useState(props.timeBlock.miliseconds);
   useEffect(() => {
-    
-    setPercent(calculateNiliseconds(hour,minutes,sec,milisec) * 100 / calculateNiliseconds(myHour,myMinutes,mySec,myMilisec) )   
-  },[milisec])
+    console.log(props.sec +"gggg")
+    console.log(props.timeBlock.beforeMyTimeToRun +"before")
+    console.log(props.timeBlock.untilMyTimeToRun +"untilMyTimeToRun")
+    if(props.sec >= props.timeBlock.beforeMyTimeToRun  && props.sec <= props.timeBlock.untilMyTimeToRun){
+      setMySec (props.sec);
+      setPercent((props.sec - props.timeBlock.beforeMyTimeToRun) *100 / (props.timeBlock.untilMyTimeToRun - props.timeBlock.beforeMyTimeToRun) ) 
+    }  
+  },[props.sec])
 
-  const {
-    startPause,
-    setStartPause,
-    sec,
-    milisec,
-    minutes,
-    hour,
-    setReset,
-
-  } = Timer()
   
-  useEffect(() => {
-
-    setStartPause(props.startPause)   
-  },[props.running])
-  useEffect(() => {
-
-  setMyHour(props.timeBlock.hour);
-  setMyMinutes(props.timeBlock.minutes);
-  setMySec (props.timeBlock.seconds);
-  setMyMilisec(props.timeBlock.miliseconds);   
-  },[props.timeBlock])
 
   const handleShowDescription = () => {
     setShowDetail(!showDetail)
