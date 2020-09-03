@@ -3,22 +3,8 @@ import React,{ useState,useEffect ,useRef} from 'react';
 import { StyleSheet, Text, View ,FlatList } from 'react-native';
 import TimeBlock  from './TimeBlock'
 import { Divider } from 'react-native-elements';
-import {getAllTimersTimeBlocks,deleteTimer,deleteTimeBlockInstnace,addTimer,createConnection,createTables,addTimeBlock,getTimer,addTimeBlockToTimer,deleteTimeBlock,getTime_Blocks,getTimers} from '../database'
 
-createConnection()
-createTables()
-// deleteTimer(2)
-// getTimers()
-// getAllTimersTimeBlocks()
-// deleteTimeBlockInstnace(5)
-// addTimer("this should work","pls work description")
-// addTimeBlock("this is 400 sec","this is abig description this is abig description this is abig description this is abig description ",400)
-// getTime_Blocks()
 
-addTimeBlockToTimer(4,3,0)
-// getTimer(4)
-
-// deleteTimeBlock(2,6,3)
 const fetchedTimer = [{
     id:1,
     position:1,
@@ -68,7 +54,7 @@ const fetchedTimer = [{
 export default function TimerList(props) {
   let flatListRef = useRef(null)
 
-  const [timerData, setTimerData] = useState(false);
+  
   let getItemLayout = (data, index) => (
     { length: 50, offset: 50 * index, index }
   )
@@ -85,34 +71,9 @@ export default function TimerList(props) {
     //   "time_block_title": "title2",
     //   "timer_id": 2,
     // }]
-  const handleSetTimerData = (data) =>{
-    let i =0
-    let befor = 0;
-    let until = 0;
-    let res = [];
-    for(i ; i < data.length ; i++){
-      let hour = Math.floor((data[i].time_block_sec / (60*60)))
-      let minutes = Math.floor(((data[i].time_block_sec -  (hour * 60*60)) / 60))
-      let sec = (data[i].time_block_sec -  (hour * 60*60) - (minutes*60))
-      res.push({
-        id:data[i].id,
-        position:data[i].position,
-        title:data[i].time_block_title,
-        description: data[i].time_block_description,
-        hour:hour,
-        minutes:minutes,
-        seconds:sec,
-        beforeMyTimeToRun:befor,
-        untilMyTimeToRun:befor + hour*24*60 + minutes*60 + sec ,
-      }) 
-      befor = befor + hour*24*60 + minutes*60 + sec;
-    }
-    setTimerData(res)
-  }
+  
 
-  useEffect(() => {
-    getTimer(4,handleSetTimerData)
-  },[])
+  
 
 
 
@@ -120,10 +81,11 @@ export default function TimerList(props) {
     <View style={styles.container}>
       <FlatList 
       ref={(ref) => { flatListRef = ref; }} 
-      data={timerData} 
+      data={props.timerData} 
       getItemLayout={getItemLayout}
+      keyExtractor={item => item.id.toString()}
       renderItem={ time_block => (
-          <TimeBlock scrollToIndex={scrollToIndex} key={time_block.id} sec={props.sec} timeBlock={time_block.item}/>
+          <TimeBlock onAddTimeBlock={props.onAddTimeBlock} scrollToIndex={scrollToIndex} key={time_block.id} sec={props.sec} timeBlock={time_block.item}/>
         )
 
     } />

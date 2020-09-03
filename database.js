@@ -45,8 +45,8 @@ export const addTimer = (timer_name,timer_description) => {
     db.transaction(
       tx => {
         tx.executeSql("insert into Timers (timer_name, timer_description) values (?, ?)", [timer_name,timer_description]);
-        tx.executeSql("select * from Timers", [], (_, { rows }) =>
-          console.log(JSON.stringify(rows))
+        tx.executeSql("select * from Timers", [], (_, { rows }) =>{
+        }
         );
       },
     );
@@ -57,41 +57,92 @@ export const addTimer = (timer_name,timer_description) => {
 // input- title: title of the timeblock
 // input- description: description of the timeblock
 // input- sec: total of seconds this timeblock will run
-export const addTimeBlock = (title,description,sec) => {
+// input- timerID: id of timer to add timeblock to
+// input- position: in witch position to add
+// output- id of inserted timeNlock
+export const addTimeBlock = (title,description,sec,timerID,position) => {
     // is text empty?
-    if (title === null || title === "" || description === null || sec=== null || sec < 1  ) {
+    if (title === null || title === "" || description === null || sec=== null || sec < 1 || timerID === null  || position < 0 ) {
       return false;
     }
-
+    
+    let lastInsertId =null
     db.transaction(
       tx => {
-        tx.executeSql("insert into Time_Blocks (time_block_title, time_block_description,time_block_sec) values (?, ?, ?)", [title,description,sec]);
-        tx.executeSql("select * from Time_Blocks", [], (_, { rows }) =>
-          console.log(JSON.stringify(rows))
+        tx.executeSql("insert into Time_Blocks (time_block_title, time_block_description,time_block_sec) values (?, ?, ?)", [title,description,sec],function(tx, sql_res) {
+            lastInsertId = sql_res.insertId;
+          });
+        tx.executeSql("select * from Time_Blocks", [], (_, { rows }) =>{
+        }
         );
       },
     );
+
+    let new_position = position;
+    // if some trying to add block in position 8 but there only 3 in that timer
+    // the time block will be added to position 4
+    db.transaction(
+        tx => {
+          tx.executeSql("select * from Timer_Time_Blocks WHERE timer_id = ? ", [timerID], (_, { rows : _array }) =>{
+            if(new_position >= _array.length){
+                new_position = _array.length
+            }
+          }
+          );
+        },
+    );
+    db.transaction(
+      tx => {
+        tx.executeSql(" UPDATE Timer_Time_Blocks SET position = position + 1 WHERE timer_id = ? and time_block_id = ? and position >= ?", [timerID,lastInsertId,new_position]);
+        tx.executeSql(" insert into Timer_Time_Blocks (timer_id, time_block_id,position) values (?, ?, ?)", [timerID,lastInsertId,new_position],function(tx, sql_res) {
+            lastInsertId = sql_res.insertId;
+          });
+        tx.executeSql("select * from Timer_Time_Blocks", [], (_, { rows }) =>{
+        }
+        );
+      },
+    );
+
+    return lastInsertId
   }
 
 // add timeblock 
 // input- title: title of the timeblock
 // input- description: description of the timeblock
 // input- sec: total of seconds this timeblock will run
+// output- id of inserted timeNlock
 export const addTimeBlockToTimer = (timerID,timeBlockId,position) => {
     // is text empty?
     if (timerID === null  || timeBlockId === null || position < 0  ) {
       return false;
     }
-
+    let new_position = position;
+    // if some trying to add block in position 8 but there only 3 in that timer
+    // the time block will be added to position 4
+    db.transaction(
+        tx => {
+          tx.executeSql("select * from Timer_Time_Blocks WHERE timer_id = ? and position < ?", [timerID,position], (_, { rows : _array }) =>{
+          new_position = _array.length;
+          console.log(_array)
+          console.log("whaaaaattttt")
+          }
+          );
+        },
+    );
     db.transaction(
       tx => {
-        tx.executeSql(" insert into Timer_Time_Blocks (timer_id, time_block_id,position) values (?, ?, ?)", [timerID,timeBlockId,position], (_, { rows }) =>
-        console.log("g"));
+        tx.executeSql(" UPDATE Timer_Time_Blocks SET position = position + 1 WHERE timer_id = ? and time_block_id = ? and position >= ?", [timerID,timeBlockId,new_position]);
+        tx.executeSql(" insert into Timer_Time_Blocks (timer_id, time_block_id,position) values (?, ?, ?)", [timerID,timeBlockId,new_position],function(tx, sql_res) {
+            console.log(sql_res)
+            lastInsertId = sql_res.insertId;
+          });
         tx.executeSql("select * from Timer_Time_Blocks", [], (_, { rows }) =>
           console.log(JSON.stringify(rows))
         );
       },
     );
+
+    return lastInsertId
   }
 
 
@@ -120,7 +171,6 @@ db.transaction(tx => {
     `select * from Timer_Time_Blocks;`,
     [],
     (_, { rows }) => {
-        console.log(rows)
       //   setTimerBlocks(_array)
       }
   );
@@ -138,7 +188,6 @@ db.transaction(tx => {
       `select * from Timer_Time_Blocks left join Time_Blocks on Time_Blocks.time_block_id = Timer_Time_Blocks.time_block_id where timer_id = ? order by position;`,
       [timerID],
       (_, { rows:_array }) => {
-          console.log(_array._array)
           setTimerBlocks(_array._array)
         }
     );
@@ -163,13 +212,34 @@ db.transaction(tx => {
   }
 
 // deletes a timeblock from a specific timer
-// input- timeBlockId: timeblock id stays in Time_Blocks table
 // input- timerID: id of the Timer in witch we delete the TimeBlock
 // the timeblock id stays in Time_Blocks table
-export const deleteTimeBlock = (timerID,timeBlockId,position) => {
-    db.transaction(
+// input- position: what position to delete
+export const deleteTimeBlock = (timerID,position) => {
+    if (timerID === null  || position < 0  ) {
+        return false;
+      }
+      // if some trying to delete block in position 8 but there only 3 in that timer
+        // the time block will be deleted from  position 3
+      let new_position = position;
+      db.transaction(
         tx => {
-          tx.executeSql(`delete from Timer_Time_Blocks where timer_id = ? and time_block_id = ? and position = ? ;`, [timerID,timeBlockId,position]);
+          tx.executeSql("select * from Timer_Time_Blocks WHERE timer_id = ? ", [timerID], (_, { rows : _array }) =>{
+              if(new_position >= _array.length){
+                new_position = _array.length - 1
+              }
+              console.log("this is the new position" + new_position)
+          }
+          
+          );
+        },
+    );
+    db.transaction(
+
+        tx => {
+            tx.executeSql(`delete from Timer_Time_Blocks where timer_id = ?  and position = ? ;`, [timerID,new_position]);
+            tx.executeSql(" UPDATE Timer_Time_Blocks SET position = position - 1 WHERE timer_id = ? and position > ?", [timerID,new_position]);
+            
         },
       )
   }
@@ -180,7 +250,7 @@ export const deleteTimeBlock = (timerID,timeBlockId,position) => {
 export const deleteTimeBlockInstnace = (timeBlockId) => {
     db.transaction(
         tx => {
-          tx.executeSql(`delete from Time_Blocks where time_block_id = ? ;`, [timeBlockId]);
+            tx.executeSql(`delete from Time_Blocks where time_block_id = ? ;`, [timeBlockId]);
         },
       )
   }
@@ -191,7 +261,7 @@ export const deleteTimeBlockInstnace = (timeBlockId) => {
   export const deleteTimer = (timerID) => {
     db.transaction(
         tx => {
-          tx.executeSql(`delete from Timers where timer_id = ? ;`, [timerID]);
+            tx.executeSql(`delete from Timers where timer_id = ? ;`, [timerID]);
         },
       )
   }

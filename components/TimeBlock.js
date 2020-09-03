@@ -2,6 +2,7 @@ import { StatusBar } from 'expo-status-bar';
 import React,{ useState,useEffect } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import CircleProgressBar from './CircleProgressBar'
+import AddTimeBlock from './addTimeBlock'
 import {Timer} from './Timer'
 const calculateNiliseconds = (h,m,s,mili) => {
     return mili + (s*1000) + (m*60*1000) + (h*60*60*1000)
@@ -50,6 +51,7 @@ export default function TimeBlock(props) {
       // changing the circle progress bar
       setPercent((props.sec - props.timeBlock.beforeMyTimeToRun) *100 / (props.timeBlock.untilMyTimeToRun - props.timeBlock.beforeMyTimeToRun) ) 
     }  
+    console.log(props.timeBlock)
   },[props.sec])
 
 
@@ -66,42 +68,63 @@ export default function TimeBlock(props) {
     )
   }
   return (
-    (showDetail) ? ( 
-      <TouchableOpacity style={styles.show_description} onPress={handleShowDescription}>
-        <View style={{flex:1,flexDirection:'row'}}>
-          <Text style={styles.title_description} >{props.timeBlock.title}</Text>
-          <View style={{flex:1}}></View>
-    <Text style={styles.time_description}>{padToTwo(myHour)}:{padToTwo(myMinutes)}:{padToTwo(mySec)}</Text>
-          <CircleProgressBar style={styles.circle_bar} percent={percent} />
+    <AddTimeBlock pushOrPress={false} timerData={[props.timeBlock]} onAddTimeBlock={props.onAddTimeBlock} onPress={handleShowDescription} >
+      {(showDetail) ? ( 
+          <View style={styles.show_description} >
+            <View style={{flex:1,flexDirection:'row'}}>
+      <Text style={styles.title_description} >{props.timeBlock.title}</Text>
+              <View style={{flex:1}}></View>
+        <Text style={styles.time_description}>{padToTwo(myHour)}:{padToTwo(myMinutes)}:{padToTwo(mySec)}</Text>
+              <CircleProgressBar style={styles.circle_bar} percent={percent} />
+            </View>
+            <View style={{flex:5,flexDirection:'row'}}>
+              <Text style={styles.description} >{props.timeBlock.description}</Text>
+            </View>
+          
         </View>
-        <View style={{flex:5,flexDirection:'row'}}>
-          <Text style={styles.description} >{props.timeBlock.description}</Text>
+        ) : (
+        <View style={styles.container} >
+            <View style={styles.title}>
+              <Text style={styles.title} >{props.timeBlock.title}</Text>
+              <Text style={styles.mini_description} >{props.timeBlock.description}</Text>
+            </View>
+            <View style={{flex:3}}></View>
+            <Text style={styles.time_display}>{padToTwo(myHour)}:{padToTwo(myMinutes)}:{padToTwo(mySec)}</Text>
+            <CircleProgressBar style={styles.circle_bar} percent={percent} />
+            
         </View>
       
-    </TouchableOpacity>
-    ) : (
-    <TouchableOpacity style={styles.container} onPress={handleShowDescription}>
-        <Text style={styles.title} >{props.timeBlock.title}</Text>
-        <View style={{flex:3}}></View>
-        <Text style={styles.time_display}>{padToTwo(myHour)}:{padToTwo(myMinutes)}:{padToTwo(mySec)}</Text>
-        <CircleProgressBar style={styles.circle_bar} percent={percent} />
-        
-    </TouchableOpacity>
-    )
+      )}
+    </AddTimeBlock>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     borderColor: 'black',
-    borderRadius: 100,
+    borderTopEndRadius:100,
+    borderBottomEndRadius:100,
+    borderTopStartRadius:20,
+    borderBottomStartRadius:20,
+    // borderRightRadius: 100,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 7,
+    },
+    shadowOpacity: 0.41,
+    shadowRadius: 9.11,
+
+    elevation: 14,
     borderWidth: 2,
     flexDirection:'row',
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent:'space-between',
-    padding: 20,
-    margin:10,
+    padding: 12,
+    paddingLeft:30,
+    paddingRight:25,
+    margin:6,
   },
   circle_bar:{
     flex: 1,
@@ -115,8 +138,20 @@ const styles = StyleSheet.create({
   },
   show_description:{
     borderColor: 'black',
-    borderRadius: 100,
+    borderTopEndRadius:100,
+    borderBottomEndRadius:100,
+    borderTopStartRadius:20,
+    borderBottomStartRadius:20,
     borderWidth: 2,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 7,
+    },
+    shadowOpacity: 0.41,
+    shadowRadius: 9.11,
+
+    elevation: 14,
     flexDirection:'column',
     backgroundColor: '#fff',
     alignItems: 'center',
@@ -138,6 +173,9 @@ const styles = StyleSheet.create({
     flex: 2,
     padding: 20,
     margin:50,
+  },
+  mini_description:{
+
   }
 
 });

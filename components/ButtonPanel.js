@@ -1,6 +1,8 @@
 import React , { useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import Icon from 'react-native-vector-icons/AntDesign';
+import AddTimeBlock from './addTimeBlock'
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
 
 export default function ButtonPanel(props) {
@@ -19,59 +21,73 @@ export default function ButtonPanel(props) {
   return (
     <View style={styles.play_panel}>
         <View style={styles.play_pause_button}>
-            {(playPause) ? 
+          <View style={styles.timer}>
+                <Text style={{fontSize:30}}>00:{props.minutes}:{props.sec}</Text>
+          </View>
+            
+        </View> 
+        <View style={styles.lowerPanel}>
+              <View >
+                <TouchableOpacity>
+                  <Icon
+                      raised
+                      name="reload1" 
+                      type='ionicon'
+                      size={40}
+                      color='#3b5998'
+                      borderRadius={40}
+                      onPress={handleReset}
+                  >
+                  </Icon>
+                </TouchableOpacity>
+              </View>
+              {(playPause) ? 
                 (
                 <View style={styles.icon_background}>
-                    <Icon
-                    name="pausecircle" 
-                    size={60}
-                    raised
-                    color='#3b5998' 
-                    borderRadius={40}
-                    onPress={handlePlayPause}
-                    >
-                    </Icon>
+                  <TouchableOpacity>
+                      <Icon
+                        name="pausecircle" 
+                        size={60}
+                        raised
+                        color='#3b5998' 
+                        borderRadius={40}
+                        onPress={handlePlayPause}
+                      >
+                      </Icon>
+                    </TouchableOpacity>
                 </View>
             ) : (
                 <View style={styles.icon_background}>
-                    <Icon
-                        raised
-                        
-                        name="play" 
-                        type='ionicon'
-                        size={60}
-                        color='#3b5998'
-                        borderRadius={40}
-                        onPress={handlePlayPause}
-                    >
-                    </Icon>
+                  <TouchableOpacity>
+                      <Icon
+                          raised
+                          name="play" 
+                          type='ionicon'
+                          size={60}
+                          color='#3b5998'
+                          borderRadius={40}
+                          onPress={handlePlayPause}
+                      >
+                      </Icon>
+                    </TouchableOpacity>
                 </View>
             )}
-        </View> 
-        <Text style={styles.timer}>00:{props.minutes}:{props.sec}</Text>
-        <View style={styles.icon_Left}>
-            <Icon
-                raised
-                name="reload1" 
-                type='ionicon'
-                size={40}
-                color='#3b5998'
-                borderRadius={40}
-                onPress={handleReset}
-            >
-            </Icon>
+                <AddTimeBlock pushOrPress={true} timerData={props.timerData} onAddTimeBlock={props.onAddTimeBlock}>
+                <View style={styles.icon_background}>
+
+                  <Icon
+                            raised
+                            name="pluscircle" 
+                            type='ionicon'
+                            size={40}
+                            color='#3b5998'
+                            borderRadius={40}
+                        >
+                    </Icon>
+                </View>
+              </AddTimeBlock>
         </View>
-        <Icon
-            raised
-            
-            name="play" 
-            type='ionicon'
-            size={60}
-            color='#3b5998'
-            borderRadius={40}
-            onPress={handlePlayPause}
-        >
-        </Icon>
+        
     </View>
   );
 }
@@ -80,30 +96,57 @@ const styles = StyleSheet.create({
     play_panel:{
         bottom:0,
         width:'100%',
-        backgroundColor: '#73c2fb',
+        
         marginBottom:-300,
         height:'60%',
         position: 'absolute',
         alignSelf: 'center',
-        borderRadius: 700,
-        borderWidth: 2,
         
       },
       play_pause_button:{
-        marginTop:-30,
+        
         alignSelf: 'center',
       },
       timer:{
-        marginTop:20,
+        marginTop:-30,
         fontSize:30,
+        padding:10,
+        shadowColor: "#000",
+        shadowOffset: {
+          width: 7,
+          height: 7,
+        },
+        shadowOpacity: 0.41,
+        shadowRadius: 9.11,
+  
+        elevation: 14,
+        borderWidth:2,
         alignSelf: 'center',
-      },
-      icon_background:{
         backgroundColor:"#fff",
         borderRadius:100,
       },
-      icon_Left:{
-        left:70,
-        bottom:30
-      }
+      icon_background:{
+        shadowColor: "#000",
+        shadowOffset: {
+          width: 17,
+          height: 17,
+        },
+        shadowOpacity: 0.41,
+        shadowRadius: 9.11,
+  
+        elevation: 18,
+        backgroundColor:"#fff",
+        borderRadius:100,
+      },
+      
+      lowerPanel:{
+        alignSelf: 'center',
+        alignItems: 'center',
+        flexDirection:'row',
+        justifyContent:'space-between',
+        width:'70%',
+        paddingTop:10
+      },
+      
+
 });
