@@ -29,6 +29,7 @@ export default function TimerInstance(props) {
     useEffect(() => {
       getTimer(props.TimerId,handleSetTimerData)
       getAllTimersTimeBlocks()
+      
     },[])
 
     const handleSetTimerData = (data) =>{
@@ -78,7 +79,7 @@ export default function TimerInstance(props) {
       }
         
       // add Time Block at the last position
-      const handleAddTimeBlock = async (data) =>{
+      const handleAddTimeBlock = async (data) => {
         if(data === null || data.title === null|| data.description === null || data.seconds === null|| data.TimerId === null|| data.position === null
           || data === "" || data.title === ""|| data.description === "" || data.seconds === ""|| data.TimerId === ""|| data.position === ""){
             console.log("nothing here should be null" + JSON.stringify(data) )
@@ -90,15 +91,20 @@ export default function TimerInstance(props) {
         //refresh
         await getTimer(props.TimerId,handleSetTimerData)
       }
+
+      const handelDeleteTimeBlock = async (position) => {
+        deleteTimeBlock(props.TimerId,position)
+        await getTimer(props.TimerId,handleSetTimerData)
+      }
     
   return (
     
     <View style={styles.container}>
       
         <View style={styles.list_container}>
-            <TimerList key={timerData.length+''} timerData={timerData} onAddTimeBlock={handleAddTimeBlock} sec={sec} startPause={startPause}/>
+            <TimerList key={timerData.length+''} onDeleteTimeBlock={handelDeleteTimeBlock} timerData={timerData} onAddTimeBlock={handleAddTimeBlock} sec={sec} startPause={startPause}/>
         </View>
-        <ButtonPanel timerData={timerData} onAddTimeBlock={handleAddTimeBlock} ResetTimer={ResetTimer} handleToggle={handleToggle} minutes={padToTwo(minutes)} sec={padToTwo(sec)}/>
+        <ButtonPanel timerData={timerData}  onAddTimeBlock={handleAddTimeBlock} ResetTimer={ResetTimer} handleToggle={handleToggle} minutes={padToTwo(minutes)} sec={padToTwo(sec)}/>
         
         
     </View>

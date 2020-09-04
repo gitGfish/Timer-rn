@@ -18,7 +18,7 @@ export default function TimeBlock(props) {
   const [position, setPosition] = useState(props.timeBlock.position);
   const [alarmOn,setAlarmOn] = useState(props.timeBlock.alarmOn);
   const [timeBlock,setTimeBlock] = useState(props.timeBlock);
-  
+  const soundObject = new Audio.Sound();
   useEffect(() => {
     setTimeBlock(props.timeBlock)
     console.log(props.timeBlock)
@@ -33,6 +33,7 @@ export default function TimeBlock(props) {
       setPosition(props.timeBlock.position)
       setPercent(0);
       setShowDetail(false);
+      
     }
     // it is the time of this time block to run 
     // we focus on him and openning his details
@@ -61,6 +62,7 @@ export default function TimeBlock(props) {
         setMyMinutes(59)
         setMyMinutes(myHour=>myHour-1)
       }
+      
       // changing the circle progress bar
       setPercent((props.sec - props.timeBlock.beforeMyTimeToRun) *100 / (props.timeBlock.untilMyTimeToRun - props.timeBlock.beforeMyTimeToRun) ) 
     }  
@@ -74,7 +76,7 @@ export default function TimeBlock(props) {
 
 
   const handleAlarm = async () => {
-    const soundObject = new Audio.Sound();
+    
 
     try {
       console.log("playingSound")
@@ -100,7 +102,7 @@ export default function TimeBlock(props) {
     )
   }
   return (
-    <AddTimeBlock pushOrPress={false} timerData={[timeBlock]} onAddTimeBlock={props.onAddTimeBlock} onPress={handleShowDescription} >
+    <AddTimeBlock pushOrPress={false} timerData={[timeBlock]} onDeleteTimeBlock={props.onDeleteTimeBlock} onAddTimeBlock={props.onAddTimeBlock} onPress={handleShowDescription} >
       {(showDetail) ? ( 
           <View style={styles.show_description} >
             <View style={{flex:1,flexDirection:'row'}}>

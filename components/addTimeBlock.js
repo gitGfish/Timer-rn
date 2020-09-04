@@ -12,7 +12,7 @@ export default function AddTimeBlock (props) {
     const [allTimeBlockPositions, setAllTimeBlockPositions] = useState([]);
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
-    
+    const [alert, setAlert] = useState(false);
     
     
     useEffect(() => {
@@ -54,9 +54,15 @@ export default function AddTimeBlock (props) {
   handleCancel = () => {
     setDalogVisible(false);
   };
- 
-  const handleAdd = () => {
+  
+  const handleDelete = () => {
+    //  delete the picked position
     console.log(insertAfterPicker)
+    props.onDeleteTimeBlock(insertAfterPicker)
+    setDalogVisible( false );
+  };
+
+  const handleAdd = () => {
     props.onAddTimeBlock({
         title:title,
         description:description,
@@ -69,6 +75,7 @@ export default function AddTimeBlock (props) {
   const onCancel = () => {
     setDalogVisible( false )
   };
+  
 
   const reactNativeModalProps = {
     onBackdropPress: onCancel,
@@ -117,7 +124,8 @@ export default function AddTimeBlock (props) {
                 </Dialog.Description>
             <Dialog.Input label="title" onChange={handleTitleChange}/>
             <Dialog.Input label="description" onChange={handleDescriptionChange}/>
-            <Dialog.Switch label="alert"/> 
+            <Dialog.Switch label="alert" checked={alert}
+            onChange={(e) => setAlert(e.target.checked)}/> 
             
                 <View style={{flexDirection:'row' , justifyContent:'space-between',alignItems: 'center'}}>
                     <Text>hours</Text>
@@ -156,6 +164,7 @@ export default function AddTimeBlock (props) {
                     
                 </View>
             <Dialog.Button label="Cancel" onPress={handleCancel} />
+            <Dialog.Button label="delete" onPress={handleDelete} />
             <Dialog.Button label="add" onPress={handleAdd} />
         </Dialog.Container>
     </View>
