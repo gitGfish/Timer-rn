@@ -8,10 +8,10 @@ export default function App() {
     <View style={styles.container}>
       <Header
         leftComponent={{ icon: 'menu', color: '#fff' }}
-        centerComponent={{ text: '8', style: { color: '#fff' } }}
+        centerComponent={{ text: '9', style: { color: '#fff' } }}
         rightComponent={{ icon: 'home', color: '#fff' }}
       />
-      <TimerInstance TimerId={8}/>
+      <TimerInstance TimerId={17}/>
     </View>
   );
 }

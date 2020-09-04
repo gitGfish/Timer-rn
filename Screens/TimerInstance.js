@@ -6,7 +6,7 @@ import {Timer} from '../components/Timer'
 import AddTmeBlock from '../components/addTimeBlock'
 import {getAllTimersTimeBlocks,deleteTimer,deleteTimeBlockInstnace,addTimer,createConnection,createTables,addTimeBlock,getTimer,addTimeBlockToTimer,deleteTimeBlock,getTime_Blocks,getTimers} from '../database'
 createConnection()
-// createTables()
+
 // // deleteTimer(2)
 // getTimers()
 // getAllTimersTimeBlocks()
@@ -78,17 +78,17 @@ export default function TimerInstance(props) {
       }
         
       // add Time Block at the last position
-      const handleAddTimeBlock = (data) =>{
+      const handleAddTimeBlock = async (data) =>{
         if(data === null || data.title === null|| data.description === null || data.seconds === null|| data.TimerId === null|| data.position === null
           || data === "" || data.title === ""|| data.description === "" || data.seconds === ""|| data.TimerId === ""|| data.position === ""){
             console.log("nothing here should be null" + JSON.stringify(data) )
             return false;
           }
         // deleteTimer(4)
-        console.log("nothing here should be null" + JSON.stringify(data) )
-        addTimeBlock(data.title,data.description,data.seconds,props.TimerId,data.position);
+        console.log(JSON.stringify(data) )
+        await addTimeBlock(data.title,data.description,data.seconds,props.TimerId,data.position);
         //refresh
-        getTimer(props.TimerId,handleSetTimerData)
+        await getTimer(props.TimerId,handleSetTimerData)
       }
     
   return (
@@ -96,7 +96,7 @@ export default function TimerInstance(props) {
     <View style={styles.container}>
       
         <View style={styles.list_container}>
-            <TimerList timerData={timerData} onAddTimeBlock={handleAddTimeBlock} sec={sec} startPause={startPause}/>
+            <TimerList key={timerData.length+''} timerData={timerData} onAddTimeBlock={handleAddTimeBlock} sec={sec} startPause={startPause}/>
         </View>
         <ButtonPanel timerData={timerData} onAddTimeBlock={handleAddTimeBlock} ResetTimer={ResetTimer} handleToggle={handleToggle} minutes={padToTwo(minutes)} sec={padToTwo(sec)}/>
         

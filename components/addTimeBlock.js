@@ -8,21 +8,22 @@ export default function AddTimeBlock (props) {
     const [secondsPicker, setSecondsPicker] = useState([]);
     const [minutesPicker, setMinutesPicker] = useState([]);
     const [hoursPicker, setHoursPicker] = useState([]);
-    const [insertAfterPicker, setInsertAfterPicker] = useState([]);
+    const [insertAfterPicker, setInsertAfterPicker] = useState(0);
     const [allTimeBlockPositions, setAllTimeBlockPositions] = useState([]);
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
-
-
+    
+    
+    
     useEffect(() => {
-        // console.log(props.timerData)
         setAllTimeBlockPositions(props.timerData.map((timeblock) => {
+            setInsertAfterPicker(props.timerData[0].position)
             return <Picker.Item key={''+timeblock.id} label={''+timeblock.title} value={timeblock.position} />
         }))
-        // used for adding after another timr block
-        if(props.timerData.length === 1){
-            setInsertAfterPicker(props.timerData[0].position)
-        }
+        // // used for adding after another timr block
+        // if(props.timerData.length === 1){
+        //     setInsertAfterPicker(props.timerData[0].position )
+        // }
       },[props.timerData])
 
     const seconds = Array.apply(null, {length: 60}).map(Number.call, Number)
@@ -47,6 +48,7 @@ export default function AddTimeBlock (props) {
     
   showDialog = () => {
     setDalogVisible(true);
+
   };
  
   handleCancel = () => {
@@ -74,13 +76,13 @@ export default function AddTimeBlock (props) {
   
 
   function handleTitleChange(e) {
-      if(e && e.nativeEvent && e.nativeEvent.text){
+      if(e && e.nativeEvent ){
         setTitle(e.nativeEvent.text);
       }
   }
 
   function handleDescriptionChange(e) {
-    if(e && e.nativeEvent && e.nativeEvent.text){
+    if(e && e.nativeEvent){
         setDescription(e.nativeEvent.text);
     }
   }
@@ -97,7 +99,7 @@ export default function AddTimeBlock (props) {
           ) }
         
         <Dialog.Container visible={dialogVisible} {...reactNativeModalProps}>
-            <View style={{flexDirection:"row",justifyContent:'space-between',alignItems: 'center',}}>
+            <View style={{flexDirection:"row",justifyContent:'space-between',alignItems: 'center'}}>
                 <Text>Insert After</Text>
                 <Picker
                             mode="dropdown"

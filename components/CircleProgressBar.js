@@ -13,7 +13,7 @@ export default function CircleProgressBar(props) {
       width={10}
       fill={props.percent}
       tintColor="#0bebff"
-      onAnimationComplete={() => console.log('onAnimationComplete')}
+      // onAnimationComplete={() => console.log('onAnimationComplete')}
       backgroundColor="#3d5875" />
     </View>
   );
