@@ -79,7 +79,7 @@ export default function TimerList(props) {
 
   return (
     <View style={styles.container}>
-      <FlatList 
+      <FlatList  contentContainerStyle={{paddingTop:10,}}
       ref={(ref) => { flatListRef = ref; }} 
       data={props.timerData} 
       getItemLayout={getItemLayout}
@@ -89,6 +89,17 @@ export default function TimerList(props) {
         )
 
     } />
+    {/* <FlatList  contentContainerStyle={{zIndex:99}}
+      ref={(ref) => { flatListRef = ref; }} 
+      data={props.timerData} 
+      getItemLayout={getItemLayout}
+      keyExtractor={item => item.id.toString()}
+      renderItem={ time_block => (
+          <TimeBlock onAddTimeBlock={props.onAddTimeBlock} onDeleteTimeBlock={props.onDeleteTimeBlock} scrollToIndex={scrollToIndex} key={time_block.id} sec={props.sec} timeBlock={time_block.item}/>
+        )
+
+    } /> */}
+    
     
     </View>
   );
@@ -97,9 +108,10 @@ export default function TimerList(props) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    flexDirection:'row',
+    
+    flexDirection:'column',
     backgroundColor: '#fff',
-    alignItems: 'center',
+    alignItems:'stretch',
     justifyContent: 'center',
   },
 });

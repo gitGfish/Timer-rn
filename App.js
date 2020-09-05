@@ -35,16 +35,17 @@ export default function App() {
         centerComponent={{ text: {TimerChosen}, style: { color: '#fff' } }}
         rightComponent={{ icon: 'home', color: '#fff' } }
         containerStyle={{
-          backgroundColor: '#3D6DCC',
+          backgroundColor: '#1778F2',
           justifyContent: 'space-around',
+          height:"15%",
         }}
       >
-        <TouchableOpacity onPress={( ) =>setScreen('main') } >
+        <TouchableOpacity  style={styles.leftIcon} onPress={( ) =>setScreen('main') } >
           <Entypo name="home" size={24} color="#fff" />
         </TouchableOpacity>
 
       <Text style={styles.title}>{(screen === 'timer' ) ? (title) : ('')}</Text>
-        <TouchableOpacity onPress={( ) =>setScreen('main') } >
+        <TouchableOpacity style={styles.rightIcon} onPress={( ) =>setScreen('main') } >
             <Feather name="settings" size={24} color="white" />
         </TouchableOpacity>
         
@@ -73,5 +74,11 @@ const styles = StyleSheet.create({
     fontSize:20,
     color:"#fff",
     alignSelf:'flex-start'
+  },
+  leftIcon:{
+    margin:10
+  },
+  rightIcon:{
+    margin:10
   }
 });

@@ -1,11 +1,13 @@
 import React, { useState ,useEffect} from 'react';
 import { StyleSheet, View , Text, Button } from 'react-native';
-import {getTimers,addTimer,deleteTimer,createConnection} from '../database'
+import {getTimers,addTimer,deleteTimer,createConnection,createTables} from '../database'
 import MainPageList from '../components/MainPageList'
 export default function MainPage(props) {
     const [timers, setTimers] = useState([]);
     useEffect(() => {
         createConnection()
+        createTables()
+        // addTimer("vitaly timer ","this is its short description")
         getTimers(setTimers)
         
       },[])

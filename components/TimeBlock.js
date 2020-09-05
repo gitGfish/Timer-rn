@@ -102,31 +102,31 @@ export default function TimeBlock(props) {
     )
   }
   return (
-    <AddTimeBlock pushOrPress={false} timerData={[timeBlock]} onDeleteTimeBlock={props.onDeleteTimeBlock} onAddTimeBlock={props.onAddTimeBlock} onPress={handleShowDescription} >
+    <AddTimeBlock style={styles.container} pushOrPress={false} timerData={[timeBlock]} onDeleteTimeBlock={props.onDeleteTimeBlock} onAddTimeBlock={props.onAddTimeBlock} onPress={handleShowDescription} >
       {(showDetail) ? ( 
           <View style={styles.show_description} >
-            <View style={{flex:1,flexDirection:'row'}}>
-      <Text style={styles.title_description} >{position} . {props.timeBlock.title}</Text>
-              <View style={{flex:1}}></View>
-        <Text style={styles.time_description}>{padToTwo(myHour)}:{padToTwo(myMinutes)}:{padToTwo(mySec)}</Text>
-              <CircleProgressBar style={styles.circle_bar} percent={percent} />
-            </View>
-            <View style={{flex:5,flexDirection:'row'}}>
-              <Text style={styles.description} >{props.timeBlock.description}</Text>
-            </View>
-          
-        </View>
-        ) : (
-        <View style={styles.container} >
-            <View style={styles.title}>
+            <View style={styles.title_and_description}>
               <Text style={styles.title} >{position} . {props.timeBlock.title}</Text>
-              <Text style={styles.mini_description} >{props.timeBlock.description}</Text>
+              <Text style={styles.big_description}  >{props.timeBlock.description}</Text>
+              
             </View>
-            <View style={{flex:3}}></View>
-            <Text style={styles.time_display}>{padToTwo(myHour)}:{padToTwo(myMinutes)}:{padToTwo(mySec)}</Text>
-            <CircleProgressBar style={styles.circle_bar} percent={percent} />
             
-        </View>
+            <CircleProgressBar style={styles.circle_bar} percent={percent} Time={padToTwo(myHour) + ":" + padToTwo(myMinutes) + ":" + padToTwo(mySec)} />
+            
+          </View>
+        ) : (
+          <View style={styles.container} >
+              <View style={styles.title_and_description}>
+                <View style={{flex:1}}></View>
+                <Text style={styles.title} >{position} . {props.timeBlock.title}</Text>
+                <Text style={styles.mini_description} >{props.timeBlock.description.substring(0, 4)}</Text>
+                <View style={{flex:1}}></View>
+              </View>
+              <Text style={styles.time_display}></Text>
+              
+              <CircleProgressBar style={styles.circle_bar} percent={percent} Time={padToTwo(myHour) + ":" + padToTwo(myMinutes) + ":" + padToTwo(mySec)} />
+              
+          </View>
       
       )}
     </AddTimeBlock>
@@ -138,67 +138,70 @@ const styles = StyleSheet.create({
     borderColor: 'black',
     borderTopEndRadius:100,
     borderBottomEndRadius:100,
-    borderTopStartRadius:20,
-    borderBottomStartRadius:20,
+    borderTopStartRadius:30,
+    borderBottomStartRadius:30,
     // borderRightRadius: 100,
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
-      height: 7,
+      height: 14,
     },
     shadowOpacity: 0.41,
     shadowRadius: 9.11,
 
-    elevation: 14,
-    borderWidth: 2,
+    elevation: 9,
     flexDirection:'row',
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent:'space-between',
-    padding: 12,
+    padding: 15,
     paddingLeft:30,
-    paddingRight:25,
-    margin:6,
+    paddingRight:30,
+    marginRight:20,
+    marginLeft:20,
+    marginBottom:20,
   },
   circle_bar:{
     flex: 1,
   },
   title:{
     fontWeight: 'bold',
-    flex: 3,
+    flex: 2,
   },
   time_display:{
-    flex: 2,
+    flex: 1,
   },
   show_description:{
     borderColor: 'black',
-    borderTopEndRadius:100,
-    borderBottomEndRadius:100,
-    borderTopStartRadius:20,
-    borderBottomStartRadius:20,
-    borderWidth: 2,
+    borderRadius:30,
+    // borderRightRadius: 100,
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
-      height: 7,
+      height: 14,
     },
     shadowOpacity: 0.41,
     shadowRadius: 9.11,
 
-    elevation: 14,
-    flexDirection:'column',
+    elevation: 9,
+    flexDirection:'row',
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent:'space-between',
-    padding: 40,
-    margin:10,
+    padding: 15,
+    paddingLeft:30,
+    paddingRight:30,
+    marginRight:20,
+    marginLeft:20,
+    marginBottom:20,
   },
   description:{
     fontWeight: 'bold',
+    
   },
   title_description:{
     fontWeight: 'bold',
-    flex: 3,
+    flex: 2,
   },
   time_description:{
     flex: 2,
@@ -209,7 +212,17 @@ const styles = StyleSheet.create({
     margin:50,
   },
   mini_description:{
-
+    flex:1
+  },
+  big_description:{
+    backgroundColor:'#f2f2f2',
+    marginTop:25,
+    marginRight:25,
+    padding:15,
+    borderRadius:15,
+  },
+  title_and_description:{
+    flex:3
   }
 
 });

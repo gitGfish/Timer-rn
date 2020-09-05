@@ -34,7 +34,7 @@ export default function ButtonPanel(props) {
                       name="reload1" 
                       type='ionicon'
                       size={40}
-                      color='#3b5998'
+                      color='#1778F2'
                       borderRadius={40}
                       onPress={handleReset}
                   >
@@ -49,7 +49,7 @@ export default function ButtonPanel(props) {
                         name="pausecircle" 
                         size={60}
                         raised
-                        color='#3b5998' 
+                        color='#1778F2' 
                         borderRadius={40}
                         onPress={handlePlayPause}
                       >
@@ -64,7 +64,7 @@ export default function ButtonPanel(props) {
                           name="play" 
                           type='ionicon'
                           size={60}
-                          color='#3b5998'
+                          color='#1778F2'
                           borderRadius={40}
                           onPress={handlePlayPause}
                       >
@@ -80,7 +80,7 @@ export default function ButtonPanel(props) {
                             name="pluscircle" 
                             type='ionicon'
                             size={40}
-                            color='#3b5998'
+                            color='#1778F2'
                             borderRadius={40}
                         >
                     </Icon>
@@ -96,9 +96,7 @@ const styles = StyleSheet.create({
     play_panel:{
         bottom:0,
         width:'100%',
-        
-        marginBottom:-300,
-        height:'60%',
+        marginBottom:10,
         position: 'absolute',
         alignSelf: 'center',
         
@@ -120,7 +118,7 @@ const styles = StyleSheet.create({
         shadowRadius: 9.11,
   
         elevation: 14,
-        borderWidth:2,
+        borderWidth:1,
         alignSelf: 'center',
         backgroundColor:"#fff",
         borderRadius:100,

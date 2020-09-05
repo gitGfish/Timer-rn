@@ -38,14 +38,16 @@ export const createTables = () => {
 // input- sec: total of seconds this timeblock will run
 export const addTimer = (timer_name,timer_description) => {
     // is text empty?
+    console.log('addTimer')
     if (timer_name === null || timer_name === "" || timer_description === null || timer_description=== ""  ) {
+      console.log("somethinf went wrong adding timer ")
       return false;
     }
 
     db.transaction(
       tx => {
         tx.executeSql("insert into Timers (timer_name, timer_description) values (?, ?)", [timer_name,timer_description]);
-        tx.executeSql("select * from Timers", [], (_, { rows }) =>{
+        tx.executeSql("select * from Timers", [], (_, { rows }) =>{console.log(rows)
         }
         );
       },
