@@ -1,10 +1,9 @@
 import { StatusBar } from 'expo-status-bar';
 import React,{ useState,useEffect ,useRef} from 'react';
-import { StyleSheet, Text, View ,FlatList } from 'react-native';
+import { StyleSheet, Text, View ,FlatList,TouchableOpacity } from 'react-native';
 import { Card, Button, Icon } from 'react-native-elements'
 import TimeBlock  from './TimeBlock'
 import { Divider } from 'react-native-elements';
-import { TouchableOpacity } from 'react-native-gesture-handler';
 import { ListItem, Avatar } from 'react-native-elements'
 
 const list = [

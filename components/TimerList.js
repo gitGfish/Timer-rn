@@ -85,7 +85,7 @@ export default function TimerList(props) {
       getItemLayout={getItemLayout}
       keyExtractor={item => item.id.toString()}
       renderItem={ time_block => (
-          <TimeBlock onAddTimeBlock={props.onAddTimeBlock} onDeleteTimeBlock={props.onDeleteTimeBlock} scrollToIndex={scrollToIndex} key={time_block.id} sec={props.sec} timeBlock={time_block.item}/>
+          <TimeBlock onAddTimeBlock={props.onAddTimeBlock} onDeleteTimeBlock={props.onDeleteTimeBlock} scrollToIndex={scrollToIndex} key={time_block.id+props.l} sec={props.sec} timeBlock={time_block.item}/>
         )
 
     } />

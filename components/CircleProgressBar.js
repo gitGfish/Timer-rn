@@ -20,12 +20,12 @@ export default function CircleProgressBar(props) {
       size={100}
       width={9}
       fill={props.percent}
-      tintColor="#0bebff"
+      tintColor="#1778F2"
       // onAnimationComplete={() => console.log('onAnimationComplete')}
       backgroundColor="#f2f2f2" >
         {
           (fill) => (
-            <Text style={{fontSize:FONT_BACK_LABEL}}>
+            <Text style={{fontSize:FONT_BACK_LABEL,fontWeight: 'bold',}}>
               {props.Time}
             
             </Text>

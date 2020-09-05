@@ -18,11 +18,12 @@ export default function TimeBlock(props) {
   const [position, setPosition] = useState(props.timeBlock.position);
   const [alarmOn,setAlarmOn] = useState(props.timeBlock.alarmOn);
   const [timeBlock,setTimeBlock] = useState(props.timeBlock);
+  const [border,setBorder] = useState(0); 
   const soundObject = new Audio.Sound();
   useEffect(() => {
     setTimeBlock(props.timeBlock)
-    console.log(props.timeBlock)
-  }, [props.timeBlock]);
+    // console.log(props.timeBlock)
+  }, []);
 
   useEffect(() => {
     if(props.sec <= 0 ){
@@ -48,6 +49,7 @@ export default function TimeBlock(props) {
     }
     // checking if is run time for this time block
     if(props.sec >= props.timeBlock.beforeMyTimeToRun  && props.sec <= props.timeBlock.untilMyTimeToRun){
+      setBorder(5)
       if(props.sec === props.timeBlock.untilMyTimeToRun){
         handleAlarm()
         console.log("finished timer")
@@ -65,12 +67,71 @@ export default function TimeBlock(props) {
       
       // changing the circle progress bar
       setPercent((props.sec - props.timeBlock.beforeMyTimeToRun) *100 / (props.timeBlock.untilMyTimeToRun - props.timeBlock.beforeMyTimeToRun) ) 
+    }else{
+      // this time block is not running now 
+      setBorder(0)
     }  
     // console.log(props.timeBlock)
   },[props.sec])
 
 
+  let container= {
+    borderColor: '#1778F2',
+    borderWidth: border,
+    borderTopEndRadius:100,
+    borderBottomEndRadius:100,
+    borderTopStartRadius:30,
+    borderBottomStartRadius:30,
+    // borderRightRadius: 100,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 14,
+    },
+    shadowOpacity: 0.41,
+    shadowRadius: 9.11,
+    elevation: 9,
+    flexDirection:'row',
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent:'space-between',
+    padding: 15,
+    paddingLeft:30,
+    paddingRight:30,
+    marginRight:20,
+    marginLeft:20,
+    marginBottom:20,
+  }
+
+  let show_description = {
+    borderColor: '#1778F2',
+    borderWidth: border,
+    borderRadius:30,
+    // borderRightRadius: 100,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 14,
+    },
+    shadowOpacity: 0.41,
+    shadowRadius: 9.11,
+
+    elevation: 9,
+    flexDirection:'row',
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent:'space-between',
+    padding: 15,
+    paddingLeft:30,
+    paddingRight:30,
+    marginRight:20,
+    marginLeft:20,
+    marginBottom:20,
+  }
+
+
   const handleShowDescription = () => {
+
     setShowDetail(!showDetail)
   }
 
@@ -102,9 +163,9 @@ export default function TimeBlock(props) {
     )
   }
   return (
-    <AddTimeBlock style={styles.container} pushOrPress={false} timerData={[timeBlock]} onDeleteTimeBlock={props.onDeleteTimeBlock} onAddTimeBlock={props.onAddTimeBlock} onPress={handleShowDescription} >
+    <AddTimeBlock  pushOrPress={false} timerData={[timeBlock]} onDeleteTimeBlock={props.onDeleteTimeBlock} onAddTimeBlock={props.onAddTimeBlock} onPress={handleShowDescription} >
       {(showDetail) ? ( 
-          <View style={styles.show_description} >
+          <View style={show_description}  >
             <View style={styles.title_and_description}>
               <Text style={styles.title} >{position} . {props.timeBlock.title}</Text>
               <Text style={styles.big_description}  >{props.timeBlock.description}</Text>
@@ -115,7 +176,7 @@ export default function TimeBlock(props) {
             
           </View>
         ) : (
-          <View style={styles.container} >
+          <View style={container} >
               <View style={styles.title_and_description}>
                 <View style={{flex:1}}></View>
                 <Text style={styles.title} >{position} . {props.timeBlock.title}</Text>
@@ -135,7 +196,7 @@ export default function TimeBlock(props) {
 
 const styles = StyleSheet.create({
   container: {
-    borderColor: 'black',
+    borderColor: '#1778F2',
     borderTopEndRadius:100,
     borderBottomEndRadius:100,
     borderTopStartRadius:30,
@@ -148,7 +209,6 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.41,
     shadowRadius: 9.11,
-
     elevation: 9,
     flexDirection:'row',
     backgroundColor: '#fff',
@@ -166,6 +226,7 @@ const styles = StyleSheet.create({
   },
   title:{
     fontWeight: 'bold',
+    fontSize:20,
     flex: 2,
   },
   time_display:{
@@ -203,9 +264,6 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     flex: 2,
   },
-  time_description:{
-    flex: 2,
-  },
   empty_last_block:{
     flex: 2,
     padding: 20,
@@ -222,7 +280,8 @@ const styles = StyleSheet.create({
     borderRadius:15,
   },
   title_and_description:{
-    flex:3
+    flex:3,
+    margin:10
   }
 
 });

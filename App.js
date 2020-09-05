@@ -1,31 +1,56 @@
 
 import React, { useState ,useEffect} from 'react';
-import { StyleSheet, View , Text, Button } from 'react-native';
+import { StyleSheet, View , Text, Button, Picker } from 'react-native';
 import TimerInstance from './Screens/TimerInstance'
-import { Header } from 'react-native-elements';
+import { Header ,ListItem} from 'react-native-elements';
 import MainPage from './Screens/MainPage'
 import { Entypo } from '@expo/vector-icons'; 
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import { Feather } from '@expo/vector-icons';
+import Example from './components/BottomSheet'
+import {getTimers,addTimer,deleteTimer,createConnection,createTables} from './database'
 export default function App() {
   const [screen, setScreen] = useState('main');
-  const [TimerChosen, setTimerChosen] = useState(0);
-  const [title,setTitle] = useState("")
+  const [TimerChosen, setTimerChosen] = useState({});
+  const [TimerChosen2, setTimerChosen2] = useState(null);
+  const [title,setTitle] = useState("");
+  const [isVisible, setIsVisible] = useState(false);
+  const [timers, setTimers] = useState([]);
+  useEffect(() => {
+      createConnection()
+      createTables()
+      // addTimer("vitaly timer ","this is its short description")
+      getTimers(setTimers)
+      
+    },[])
+
+    // useEffect(() => {
+    //   setTimerChosen2(TimerChosen2),
+    //   setTitle(TimerChosen.timer_name + " | " + TimerChosen2.timer_name)
+      
+    // },[TimerChosen2])
 
   const handleTimerChosen = (timer) => {
-    setTimerChosen(timer.timer_id)
+    setTimerChosen(timer)
     setScreen('timer');
     setTitle(timer.timer_name)
   }
 
+  const handleTimerChosen2 = (timer) => {
+    setTimerChosen2(timer)
+    if(timer){
+      setTitle(TimerChosen.timer_name + " | " + timer.timer_name)
+    }
+  }
+
   const renderSwitch = () => {
+    // setTimerChosen2({})
     switch(screen) {
       case 'main':
-        return <MainPage handleTimerChosen={handleTimerChosen}  />;
+        return <MainPage handleTimerChosen2={ handleTimerChosen2} handleTimerChosen={handleTimerChosen} timers={timers} />;
       case 'timer':
-        return <TimerInstance TimerId={TimerChosen} />;
+        return <TimerInstance TimerId={TimerChosen} TimerId2={TimerChosen2} />;
       default:
-        return <MainPage handleTimerChosen={handleTimerChosen} />;
+        return <MainPage handleTimerChosen2={handleTimerChosen2} handleTimerChosen={handleTimerChosen} timers={timers}/>;
     }
   }
 
@@ -45,12 +70,13 @@ export default function App() {
         </TouchableOpacity>
 
       <Text style={styles.title}>{(screen === 'timer' ) ? (title) : ('')}</Text>
-        <TouchableOpacity style={styles.rightIcon} onPress={( ) =>setScreen('main') } >
-            <Feather name="settings" size={24} color="white" />
+        <TouchableOpacity key={timers.length} style={styles.rightIcon} onPress={( ) => setIsVisible(!isVisible) } >
+            
+            <Example onTimerChosen={handleTimerChosen2} timers={timers}/>
         </TouchableOpacity>
         
       </Header>
-      {renderSwitch()}
+      {renderSwitch()}  
     </View>
   );
 }

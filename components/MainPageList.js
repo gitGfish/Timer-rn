@@ -17,6 +17,7 @@ export default function MainPageList(props) {
   return (
     <View style={styles.container}>
       <FlatList 
+      persistentScrollbar={true}
       ref={(ref) => { flatListRef = ref; }} 
       data={props.timers} 
       getItemLayout={getItemLayout}

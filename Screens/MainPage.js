@@ -3,20 +3,15 @@ import { StyleSheet, View , Text, Button } from 'react-native';
 import {getTimers,addTimer,deleteTimer,createConnection,createTables} from '../database'
 import MainPageList from '../components/MainPageList'
 export default function MainPage(props) {
-    const [timers, setTimers] = useState([]);
+    
     useEffect(() => {
-        createConnection()
-        createTables()
-        // addTimer("vitaly timer ","this is its short description")
-        getTimers(setTimers)
-        
-      },[])
-
+        props.handleTimerChosen2(null)
+    }, []);
       
 
     return (
         <View style={styles.container}>
-            <MainPageList onTimerChosen={props.handleTimerChosen} timers={timers}/>
+            <MainPageList onTimerChosen={props.handleTimerChosen} timers={props.timers}/>
             
         </View>
     );
