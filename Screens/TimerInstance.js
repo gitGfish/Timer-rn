@@ -22,7 +22,7 @@ createConnection()
 
 export default function TimerInstance(props) {
 
-    let padToTwo = (number) => (number <= 9 ? `0${number}`: number);
+    
 
     const [timerData, setTimerData] = useState([]);
     const [timerData2, setTimerData2] = useState(null);
@@ -117,33 +117,47 @@ export default function TimerInstance(props) {
           }
         // deleteTimer(4)
         console.log(JSON.stringify(data) )
-        await addTimeBlock(data.title,data.description,data.seconds,props.TimerId,data.position);
+        await addTimeBlock(data.title,data.description,data.seconds,props.TimerId.timer_id,data.position);
         //refresh
-        await getTimer(props.TimerId,handleSetTimerData)
+        await getTimer(props.TimerId.timer_id,handleSetTimerData)
       }
 
       const handelDeleteTimeBlock = async (position) => {
-        deleteTimeBlock(props.TimerId,position)
-        await getTimer(props.TimerId,handleSetTimerData)
+        deleteTimeBlock(props.TimerId.timer_id,position)
+        await getTimer(props.TimerId.timer_id,handleSetTimerData)
       }
     
   return (
-    
-    <View style={styles.container}>
+    (timerData2) ? (
+      // 2 timer showing
+      <View style={styles.container_2}>
       
-        <View style={styles.list_top_container}>
-            <TimerList key={timerData.length+''} l={1} onDeleteTimeBlock={handelDeleteTimeBlock} timerData={timerData} onAddTimeBlock={handleAddTimeBlock} sec={sec} startPause={startPause}/>
+        <View style={styles.list_top_container_2}>
+            <TimerList small={true} key={timerData.length+''} l={1} onDeleteTimeBlock={handelDeleteTimeBlock} timerData={timerData} onAddTimeBlock={handleAddTimeBlock} sec={sec} startPause={startPause}/>
         </View>
-        {(timerData2) ? (
-          <View style={styles.list_below_container}>
-          <TimerList key={timerData.length+''} l={2} onDeleteTimeBlock={handelDeleteTimeBlock} timerData={timerData2} onAddTimeBlock={handleAddTimeBlock} sec={sec} startPause={startPause}/>
+          <View style={styles.list_below_container_2}>
+          <TimerList small={true} key={timerData.length+''} l={2} onDeleteTimeBlock={handelDeleteTimeBlock} timerData={timerData2} onAddTimeBlock={handleAddTimeBlock} sec={sec} startPause={startPause}/>
       </View>
-        ) : null}
         
-        <ButtonPanel timerData={timerData}  onAddTimeBlock={handleAddTimeBlock} ResetTimer={ResetTimer} handleToggle={handleToggle} minutes={padToTwo(minutes)} sec={padToTwo(sec)}/>
+        <ButtonPanel timerData={timerData}  onAddTimeBlock={handleAddTimeBlock} ResetTimer={ResetTimer} handleToggle={handleToggle} sec={sec}/>
         
         
     </View>
+    // if only one timer showing
+    ) : (
+      <View style={styles.container}>
+      
+        <View style={styles.list_top_container}>
+            <TimerList  small={false} key={timerData.length+''} l={1} onDeleteTimeBlock={handelDeleteTimeBlock} timerData={timerData} onAddTimeBlock={handleAddTimeBlock} sec={sec} startPause={startPause}/>
+        </View>
+          
+        
+        <ButtonPanel timerData={timerData}  onAddTimeBlock={handleAddTimeBlock} ResetTimer={ResetTimer} handleToggle={handleToggle}  sec={sec}/>
+        
+        
+    </View>
+    )
+    
   );
 }
 
@@ -158,7 +172,6 @@ const styles = StyleSheet.create({
   list_top_container: {
     flex: 1,
     marginBottom:2,
-    borderBottomWidth:5,
     flexDirection:'row',
     backgroundColor: '#fff',
     alignItems: 'center',
@@ -167,7 +180,29 @@ const styles = StyleSheet.create({
   list_below_container:{
     flex: 1,
     marginTop:2,
-    borderTopWidth:5,
+    flexDirection:'row',
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  container_2: {
+    flex: 1,
+    flexDirection:'row',
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  list_top_container_2: {
+    flex: 1,
+    marginBottom:2,
+    flexDirection:'row',
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  list_below_container_2:{
+    flex: 1,
+    marginTop:2,
     flexDirection:'row',
     backgroundColor: '#fff',
     alignItems: 'center',

@@ -1,8 +1,9 @@
 {
   "expo": {
-    "name": "Timer-rn",
-    "slug": "Timer-rn",
-    "version": "1.0.0",
+    "name": "Timers",
+    "slug": "Timers",
+    "version": "1.0.3",
+    "sdkVersion" : "38.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
@@ -13,14 +14,13 @@
     "updates": {
       "fallbackToCacheTimeout": 0
     },
+    "android": {
+      "package": "com.Fish.Timers",
+      "versionCode": 5,
+      "permissions": []
+    },
     "assetBundlePatterns": [
       "**/*"
-    ],
-    "ios": {
-      "supportsTablet": true
-    },
-    "web": {
-      "favicon": "./assets/favicon.png"
-    }
+    ]
   }
 }

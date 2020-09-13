@@ -1,7 +1,7 @@
 import { StatusBar } from 'expo-status-bar';
 import React,{ useState,useEffect } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
-import CircleProgressBar from './CircleProgressBar'
+import SmallCircleProgressBar from './SmallCircleProgressBar'
 import AddTimeBlock from './addTimeBlock'
 import {Timer} from './Timer'
 import { Audio, Video } from 'expo-av';
@@ -9,7 +9,7 @@ const calculateSeconds = (h,m,s) => {
     return mili + (s*1000) + (m*60*1000) + (h*60*60*1000)
 }
 let padToTwo = (number) => (number <= 9 ? `0${number}`: number);
-export default function TimeBlock(props) {
+export default function SmallTimeBlock(props) {
   const [showDetail, setShowDetail] = useState(false);
   const [percent, setPercent] = useState(0);
   const [myHour, setMyHour] = useState(props.timeBlock.hour);
@@ -26,7 +26,16 @@ export default function TimeBlock(props) {
   }, []);
 
   useEffect(() => {
-    
+    if(props.sec <= 0 ){
+      setMyHour(props.timeBlock.hour);
+      setMyMinutes(props.timeBlock.minutes);
+      setMySec(props.timeBlock.seconds);
+      setAlarmOn(props.timeBlock.alarmOn);
+      setPosition(props.timeBlock.position)
+      setPercent(0);
+      setShowDetail(false);
+      
+    }
     // it is the time of this time block to run 
     // we focus on him and openning his details
     if(props.sec === props.timeBlock.beforeMyTimeToRun){
@@ -44,7 +53,8 @@ export default function TimeBlock(props) {
       if(props.sec === props.timeBlock.untilMyTimeToRun){
         handleAlarm()
         console.log("finished timer")
-      }else if(mySec > 0 ){
+      }
+      if(mySec > 0 ){
         setMySec(mySec=>mySec-1)
       }else if(myMinutes > 0 ){
         setMySec(59);
@@ -52,7 +62,7 @@ export default function TimeBlock(props) {
       }else if(myHour > 0){
         setMySec(59);
         setMyMinutes(59)
-        setMyHour(myHour=>myHour-1)
+        setMyMinutes(myHour=>myHour-1)
       }
       
       // changing the circle progress bar
@@ -61,16 +71,6 @@ export default function TimeBlock(props) {
       // this time block is not running now 
       setBorder(0)
     }  
-    if(props.sec === 0 ){
-      setMyHour(props.timeBlock.hour);
-      setMyMinutes(props.timeBlock.minutes);
-      setMySec(props.timeBlock.seconds);
-      setAlarmOn(props.timeBlock.alarmOn);
-      setPosition(props.timeBlock.position)
-      setPercent(0);
-      setShowDetail(false);
-      
-    }
     // console.log(props.timeBlock)
   },[props.sec])
 
@@ -78,8 +78,8 @@ export default function TimeBlock(props) {
   let container= {
     borderColor: '#1778F2',
     borderWidth: border,
-    borderTopEndRadius:100,
-    borderBottomEndRadius:100,
+    borderTopEndRadius:30,
+    borderBottomEndRadius:30,
     borderTopStartRadius:30,
     borderBottomStartRadius:30,
     // borderRightRadius: 100,
@@ -95,12 +95,12 @@ export default function TimeBlock(props) {
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent:'space-between',
-    padding: 15,
-    paddingLeft:30,
-    paddingRight:30,
-    marginRight:20,
-    marginLeft:20,
-    marginBottom:20,
+    padding: 5,
+    paddingLeft:10,
+    paddingRight:10,
+    marginRight:5,
+    marginLeft:5,
+    marginBottom:5,
   }
 
   let show_description = {
@@ -164,69 +164,29 @@ export default function TimeBlock(props) {
   }
   return (
     <AddTimeBlock  pushOrPress={false} timerData={[timeBlock]} onDeleteTimeBlock={props.onDeleteTimeBlock} onAddTimeBlock={props.onAddTimeBlock} onPress={handleShowDescription} >
-      {(showDetail) ? ( 
-          <View style={show_description}  >
-            <View style={styles.title_and_description}>
-              <Text style={styles.title} >{position} . {props.timeBlock.title}</Text>
-              <Text style={styles.big_description}  >{props.timeBlock.description}</Text>
-              
-            </View>
-            
-            <CircleProgressBar style={styles.circle_bar} percent={percent} Time={padToTwo(myHour) + ":" + padToTwo(myMinutes) + ":" + padToTwo(mySec)} />
-            
-          </View>
-        ) : (
+      
           <View style={container} >
               <View style={styles.title_and_description}>
                 <View style={{flex:1}}></View>
-                <Text style={styles.title} >{position} . {props.timeBlock.title}</Text>
-                <Text style={styles.mini_description} >{props.timeBlock.description.substring(0, 4)}</Text>
+                <Text style={styles.title} >{props.timeBlock.title}</Text>
+                <Text style={styles.mini_description} >{props.timeBlock.description.substring(0, 25) + ' ...'}</Text>
                 <View style={{flex:1}}></View>
               </View>
-              <Text style={styles.time_display}></Text>
-              
-              <CircleProgressBar style={styles.circle_bar} percent={percent} Time={padToTwo(myHour) + ":" + padToTwo(myMinutes) + ":" + padToTwo(mySec)} />
-              
+              <SmallCircleProgressBar style={styles.circle_bar} percent={percent} Time={padToTwo(myHour) + ":" + padToTwo(myMinutes) + ":" + padToTwo(mySec)} />
+              <View style={{flex:0.2}}></View>
           </View>
-      
-      )}
     </AddTimeBlock>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    borderColor: '#1778F2',
-    borderTopEndRadius:100,
-    borderBottomEndRadius:100,
-    borderTopStartRadius:30,
-    borderBottomStartRadius:30,
-    // borderRightRadius: 100,
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 14,
-    },
-    shadowOpacity: 0.41,
-    shadowRadius: 9.11,
-    elevation: 9,
-    flexDirection:'row',
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent:'space-between',
-    padding: 15,
-    paddingLeft:30,
-    paddingRight:30,
-    marginRight:20,
-    marginLeft:20,
-    marginBottom:20,
-  },
+  
   circle_bar:{
     flex: 1,
   },
   title:{
     fontWeight: 'bold',
-    fontSize:20,
+    fontSize:15,
     flex: 2,
   },
   time_display:{

@@ -15,13 +15,16 @@ export default function App() {
   const [title,setTitle] = useState("");
   const [isVisible, setIsVisible] = useState(false);
   const [timers, setTimers] = useState([]);
+  // when ever you want to refresh the main page multiply by -1
+  const [refresh, setRefresh] = useState(1);
   useEffect(() => {
       createConnection()
       createTables()
       // addTimer("vitaly timer ","this is its short description")
       getTimers(setTimers)
       
-    },[])
+    },[refresh])
+    
 
     // useEffect(() => {
     //   setTimerChosen2(TimerChosen2),
@@ -41,16 +44,19 @@ export default function App() {
       setTitle(TimerChosen.timer_name + " | " + timer.timer_name)
     }
   }
+  const handleRefresh = () => {
+    setRefresh(refresh => refresh * -1)
+  }
 
   const renderSwitch = () => {
     // setTimerChosen2({})
     switch(screen) {
       case 'main':
-        return <MainPage handleTimerChosen2={ handleTimerChosen2} handleTimerChosen={handleTimerChosen} timers={timers} />;
+        return <MainPage handleRefresh={handleRefresh} handleTimerChosen2={ handleTimerChosen2} handleTimerChosen={handleTimerChosen} timers={timers} />;
       case 'timer':
         return <TimerInstance TimerId={TimerChosen} TimerId2={TimerChosen2} />;
       default:
-        return <MainPage handleTimerChosen2={handleTimerChosen2} handleTimerChosen={handleTimerChosen} timers={timers}/>;
+        return <MainPage setRefresh={setRefresh} handleTimerChosen2={handleTimerChosen2} handleTimerChosen={handleTimerChosen} timers={timers}/>;
     }
   }
 
@@ -65,7 +71,7 @@ export default function App() {
           height:"15%",
         }}
       >
-        <TouchableOpacity  style={styles.leftIcon} onPress={( ) =>setScreen('main') } >
+        <TouchableOpacity  style={styles.leftIcon} onPress={( ) =>{setScreen('main'); setTimerChosen2(null)} } >
           <Entypo name="home" size={24} color="#fff" />
         </TouchableOpacity>
 

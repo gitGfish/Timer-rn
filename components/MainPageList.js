@@ -23,7 +23,7 @@ export default function MainPageList(props) {
       getItemLayout={getItemLayout}
       keyExtractor={item => item.timer_id.toString()}
       renderItem={ timer => (
-            <MainPageComponent onTimerChosen={props.onTimerChosen} data={timer.item}/>
+            <MainPageComponent onDeleteTimer={ props.onDeleteTimer} onTimerChosen={props.onTimerChosen} data={timer.item}/>
         )
 
     } />
@@ -37,7 +37,7 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection:'row',
     backgroundColor: '#fff',
-    alignItems: 'center',
+    alignItems:'stretch',
     justifyContent: 'center',
   },
 });

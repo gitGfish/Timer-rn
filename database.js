@@ -260,6 +260,10 @@ export const deleteTimeBlockInstnace = (timeBlockId) => {
 // input- timerID: id of the Timer to delete
 
   export const deleteTimer = (timerID) => {
+    if(!timerID || timerID === null || timerID === ''){
+      return 
+    }
+    console.log('delete timer: ' + timerID)
     db.transaction(
         tx => {
             tx.executeSql(`delete from Timers where timer_id = ? ;`, [timerID]);

@@ -28,10 +28,14 @@ export default function MainPageComponent(props) {
             props.onTimerChosen(props.data)
     }
 
+    const handleDeleteTimer = () => {
+      if(props.data || props.data.timer_id)
+        props.onDeleteTimer(props.data.timer_id)
+  }
+
   return (
-    <TouchableOpacity onPress={handleTimerChosen}>
+    <TouchableOpacity onLongPress={handleDeleteTimer} onPress={handleTimerChosen}>
         <ListItem bottomDivider>
-            <Avatar source={{uri: 'https://s3.amazonaws.com/uifaces/faces/twitter/adhamdannaway/128.jpg'}} />
             <ListItem.Content>
             <ListItem.Title>{props.data.timer_name}</ListItem.Title>
             <ListItem.Subtitle>{props.data.timer_description}</ListItem.Subtitle>

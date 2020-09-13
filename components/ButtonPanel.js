@@ -1,4 +1,4 @@
-import React , { useState } from 'react';
+import React , { useState,useEffect } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import Icon from 'react-native-vector-icons/AntDesign';
 import AddTimeBlock from './addTimeBlock'
@@ -8,6 +8,28 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 export default function ButtonPanel(props) {
 
     const [playPause, setPlayPause] = useState(false);
+    const [myHour, setMyHour] = useState(0);
+    const [myMinutes, setMyMinutes] = useState(0);
+    const [mySec, setMySec] = useState(0);
+
+    let padToTwo = (number) => (number <= 9 ? `0${number}`: number);
+    useEffect(() => {
+      if(mySec < 59 ){
+        setMySec(mySec=>mySec+1)
+      }else if(myMinutes < 59 ){
+        setMySec(0);
+        setMyMinutes(myMinutes=>myMinutes+1)
+      }else if(myHour < 24 ){
+        setMySec(0);
+        setMyMinutes(0)
+        setMyHour(myHour=>myHour+1)
+      }
+      if(props.sec === 0){
+        setMySec(0)
+      }
+    }, [props.sec]);
+
+    
 
     const handlePlayPause = () => {
         props.handleToggle()
@@ -22,7 +44,7 @@ export default function ButtonPanel(props) {
     <View style={styles.play_panel}>
         <View style={styles.play_pause_button}>
           <View style={styles.timer}>
-                <Text style={{fontSize:30}}>00:{props.minutes}:{props.sec}</Text>
+                <Text style={{fontSize:30}}>{padToTwo(myHour)}:{padToTwo(myMinutes)}:{padToTwo(mySec)}</Text>
           </View>
             
         </View> 

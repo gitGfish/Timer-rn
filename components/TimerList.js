@@ -3,7 +3,7 @@ import React,{ useState,useEffect ,useRef} from 'react';
 import { StyleSheet, Text, View ,FlatList } from 'react-native';
 import TimeBlock  from './TimeBlock'
 import { Divider } from 'react-native-elements';
-
+import SmallTimeBlock from './SmallTimeBlock'
 
 const fetchedTimer = [{
     id:1,
@@ -85,8 +85,12 @@ export default function TimerList(props) {
       getItemLayout={getItemLayout}
       keyExtractor={item => item.id.toString()}
       renderItem={ time_block => (
-          <TimeBlock onAddTimeBlock={props.onAddTimeBlock} onDeleteTimeBlock={props.onDeleteTimeBlock} scrollToIndex={scrollToIndex} key={time_block.id+props.l} sec={props.sec} timeBlock={time_block.item}/>
+        (props.small) ? (
+            <SmallTimeBlock  onAddTimeBlock={props.onAddTimeBlock} onDeleteTimeBlock={props.onDeleteTimeBlock} scrollToIndex={scrollToIndex} key={time_block.id+props.l} sec={props.sec} timeBlock={time_block.item}/> 
+          ) : ( 
+            <TimeBlock  onAddTimeBlock={props.onAddTimeBlock} onDeleteTimeBlock={props.onDeleteTimeBlock} scrollToIndex={scrollToIndex} key={time_block.id+props.l} sec={props.sec} timeBlock={time_block.item}/>
         )
+      )
 
     } />
     {/* <FlatList  contentContainerStyle={{zIndex:99}}
